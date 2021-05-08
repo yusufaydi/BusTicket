@@ -1,0 +1,72 @@
+﻿@using BusTicket.Models
+
+@model ViewModel
+
+
+  
+  <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>BuyTicket</title>
+        <link href="~/css/bootstrap.css" rel="stylesheet" />
+        <link href="~/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/css/style.css">
+        <script src="~/js/bootstrap.min.js"></script>
+        <script src="~/js/bootstrap-datepicker.min.js"></script>
+        <script src="~/js/jquery.min.js"></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+
+        <div>
+            <table class="table">
+                <tr>
+                    <td>
+                        <form method="post" class="form-group">
+                            <b>Gidilecek Güzergah</b>
+                            @Html.DropDownList("LocationId", new SelectList(ViewBag.viewModel.LocationList.Values, "LocationId", "LocationName"), new { @class = "form-control" })
+                            <br />
+                            <b>Kalkış Zamanı</b>
+                            @Html.EditorFor(ViewModel => ViewModel.RouteList.FirstOrDefault().Value.DepartureTime, null, "DepartureTime", new { HtmlAttribute = new { @class = "form-control datepicker" } })
+                            <br />
+                            <button class="btn btn-info">Bilet Ara</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Güzergah</th>
+                                <th>Dolu Koltuk</th>
+                                <th>Fiyat</th>
+                                <th>Tarih - Saat</th>
+                                <th>Bilet</th>
+                            </tr>
+
+                            @foreach (var x in ViewBag.viewModel.RouteList)
+                            {
+                                var locationList = @ViewBag.viewModel.LocationList;
+
+                                var location = locationList[@x.Value.StartLocationId];
+                                <tr>
+                                    <td>@location.LocationName</td>
+                                    <td>@x.Value.FilledSeatCount</td>
+                                    <td>@x.Value.RoutPrice</td>
+                                    <td>@x.Value.DepartureTime</td>
+                                    <td><a href="../Home/Confirm?routeId=@x.Value.RouteId"class="btn btn-danger" role="button">Satın Al</a>
+                                </tr>
+                            }
+
+                        </table>
+                    </td>
+                </tr>
+
+            </table>
+        </div>        
+    </body>
+</html>

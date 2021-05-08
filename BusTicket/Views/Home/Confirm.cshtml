@@ -1,0 +1,40 @@
+﻿@using BusTicket.Models
+
+@model ViewModel
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>BuyTicket</title>
+        <link href="~/css/bootstrap.css" rel="stylesheet" />
+        <link href="~/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/css/style.css">
+        <script src="~/js/bootstrap.min.js"></script>
+        <script src="~/js/bootstrap-datepicker.min.js"></script>
+        <script src="~/js/jquery.min.js"></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <div>
+            <form method="Post">
+                <b>Bilet Sahibinin Adı:@ViewBag.routeId</b>
+                @Html.TextBox("UserName", null, new { @class = "form-control" })
+                <b>Bilet Sahibinin Soyadı:</b>
+                @Html.TextBox("UserSurname", null, new { @class = "form-control" })
+            <div style="display:none">
+                
+
+                 @Html.TextBox("RouteId",(string) ViewBag.routeId, new { @class = "form-control" })
+               
+
+            </div>
+                <button class="btn btn-info">Onayla</button>
+
+            </form>
+        </div>
+    </body>
+    </html>
