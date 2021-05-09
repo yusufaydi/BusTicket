@@ -1,0 +1,61 @@
+﻿@using BusTicket.Models
+
+@model ViewModel
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BuyTicket</title>
+    <link href="~/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/style.css">
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/js/jquery.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Login" asp-action="SingIn">Logout</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+            </div>
+        </nav>
+    </header>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>Kullanıcı Adı</th>
+            <th>Fiyat</th>
+            <th>Bilet</th>
+        </tr>
+
+        @using (Html.BeginForm("HandleDeleteButtonClick", "Admin"))
+        {
+            @foreach (var x in ViewBag.ticketList)
+            {
+                <tr>
+                    <td>@x.UserName</td>
+                    <td>@x.RoutePrice</td>
+                    <td>
+                        <button type="submit" name="ticketId" value=@x.TicketId>İptal</button>
+                    </td>
+                </tr>
+            }
+        }
+
+
+    </table>
+
+</body>
+</html>

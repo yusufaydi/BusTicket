@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace BusTicket.Models
 {
-    public class Location : BaseModel
+    public abstract class BaseModel
     {
-        public string LocationName { get; set; }
+        [Key]
+        public int Id { get; set; }
+        public DateTime LastUpdateDate { get; set; }
+        public string RecordStatus { get; set; }
     }
 }

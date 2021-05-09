@@ -21,7 +21,7 @@ namespace BusTicket.Migrations
 
             modelBuilder.Entity("BusTicket.Models.Bus", b =>
                 {
-                    b.Property<int>("BusId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -29,17 +29,20 @@ namespace BusTicket.Migrations
                     b.Property<DateTime>("LastUpdateDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("RecordStatus")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("SeatCapacity")
                         .HasColumnType("int");
 
-                    b.HasKey("BusId");
+                    b.HasKey("Id");
 
                     b.ToTable("Bus");
                 });
 
             modelBuilder.Entity("BusTicket.Models.Location", b =>
                 {
-                    b.Property<int>("LocationId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -50,14 +53,17 @@ namespace BusTicket.Migrations
                     b.Property<string>("LocationName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("LocationId");
+                    b.Property<string>("RecordStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Location");
                 });
 
             modelBuilder.Entity("BusTicket.Models.Route", b =>
                 {
-                    b.Property<int>("RouteId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -77,20 +83,23 @@ namespace BusTicket.Migrations
                     b.Property<DateTime>("LastUpdateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("RoutPrice")
-                        .HasColumnType("int");
+                    b.Property<string>("RecordStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("RoutPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("StartLocationId")
                         .HasColumnType("int");
 
-                    b.HasKey("RouteId");
+                    b.HasKey("Id");
 
                     b.ToTable("Route");
                 });
 
             modelBuilder.Entity("BusTicket.Models.Ticket", b =>
                 {
-                    b.Property<int>("TicketId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -98,20 +107,26 @@ namespace BusTicket.Migrations
                     b.Property<DateTime>("LastUpdateDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("RecordStatus")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("RouteId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("TicketId");
+                    b.HasKey("Id");
 
                     b.ToTable("Ticket");
                 });
 
             modelBuilder.Entity("BusTicket.Models.User", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -120,6 +135,7 @@ namespace BusTicket.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsAdmin")
@@ -129,12 +145,21 @@ namespace BusTicket.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RecordStatus")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId");
+                    b.Property<string>("UserSurname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
 
                     b.ToTable("User");
                 });

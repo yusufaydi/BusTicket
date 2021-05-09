@@ -2,7 +2,7 @@
 
 namespace BusTicket.Migrations
 {
-    public partial class addTicketToDatabase : Migration
+    public partial class locationToDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -10,6 +10,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using BusTicket.Models.ViewModels;
 
 namespace BusTicket.Controllers
 {
@@ -21,24 +22,33 @@ namespace BusTicket.Controllers
         {
             _db = db;
         }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
         [HttpGet]
-        public IActionResult Register() 
+        public IActionResult Register()
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult Register(User user)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("Register");
+            }
             user.LastUpdateDate = DateTime.Now;
             user.CreateDate = DateTime.Now;
-            _db.User.Add(user);
-            _db.SaveChanges();
-            return RedirectToAction("SingIn");
+            var registeredUser = _db.User.SingleOrDefault(x => x.Email == user.Email);
+            if (registeredUser == null)
+            {
+                _db.User.Add(user);
+                _db.SaveChanges();
+                return RedirectToAction("SingIn");
+            }
+            else
+            {
+                ModelState.AddModelError(String.Empty,"Zaten üyesiniz");
+            }
+            return View();
         }
 
         [HttpGet]
@@ -48,26 +58,40 @@ namespace BusTicket.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SingIn(User user)
+        public async Task<IActionResult> SingIn(SingInModel user)
         {
-            var loginUser = _db.User.FirstOrDefault(x => x.UserName == user.UserName && x.Password == user.Password);
-            if(loginUser != null)
+            if (!ModelState.IsValid)
+            {
+                return View("SingIn");
+            }
+            var loginUser = _db.User.FirstOrDefault(x => x.Email == user.Email && x.Password == user.Password);
+            if (loginUser != null)
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name,user.UserName)
+                    new Claim(ClaimTypes.Name,user.Email)
                 };
                 var userIdentitiy = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 ClaimsPrincipal principal = new ClaimsPrincipal(userIdentitiy);
 
                 await HttpContext.SignInAsync(principal);
 
-                return RedirectToAction("BuyTicket","Home");
+                if (loginUser.IsAdmin)
+                {
+                    return RedirectToAction("Admin", "Admin");
+                }
+                else
+                {
+                    return RedirectToAction("BuyTicket", "Home");
+                }
             }
+
+            else
+            {
+                ModelState.AddModelError(String.Empty, "Şifre veya kullanıcı hatalıdır");
+            }
+
             return View();
         }
-
-
-
     }
 }

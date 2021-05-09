@@ -19,16 +19,29 @@
         <script src="~/js/jquery.min.js"></script>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
     </head>
     <body>
-
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container">
+                    <a class="navbar-brand" asp-area="" asp-controller="Login" asp-action="SingIn"> Çıkış </a>
+                    <button class="navbar-toggler btn-danger" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+            </nav>
+        </header>
+        <br /><br /><br /><br /><br /><br /><br /><br />
         <div>
             <table class="table">
                 <tr>
                     <td>
                         <form method="post" class="form-group">
                             <b>Gidilecek Güzergah</b>
-                            @Html.DropDownList("LocationId", new SelectList(ViewBag.viewModel.LocationList.Values, "LocationId", "LocationName"), new { @class = "form-control" })
+                            @Html.DropDownList("LocationId", new SelectList(ViewBag.viewModel.LocationList.Values, "Id", "LocationName"), new { @class = "form-control" })
                             <br />
                             <b>Kalkış Zamanı</b>
                             @Html.EditorFor(ViewModel => ViewModel.RouteList.FirstOrDefault().Value.DepartureTime, null, "DepartureTime", new { HtmlAttribute = new { @class = "form-control datepicker" } })
@@ -58,7 +71,7 @@
                                     <td>@x.Value.FilledSeatCount</td>
                                     <td>@x.Value.RoutPrice</td>
                                     <td>@x.Value.DepartureTime</td>
-                                    <td><a href="../Home/Confirm?routeId=@x.Value.RouteId"class="btn btn-danger" role="button">Satın Al</a>
+                                    <td><a href="../Home/Confirm?routeId=@x.Value.Id" class="btn btn-danger" role="button">Satın Al</a>
                                 </tr>
                             }
 
@@ -67,6 +80,6 @@
                 </tr>
 
             </table>
-        </div>        
+        </div>
     </body>
 </html>

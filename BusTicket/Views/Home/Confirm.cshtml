@@ -19,19 +19,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
+
         <div>
             <form method="Post">
-                <b>Bilet Sahibinin Adı:@ViewBag.routeId</b>
+                <b>Bilet Sahibinin Adı:</b>
                 @Html.TextBox("UserName", null, new { @class = "form-control" })
                 <b>Bilet Sahibinin Soyadı:</b>
                 @Html.TextBox("UserSurname", null, new { @class = "form-control" })
-            <div style="display:none">
-                
+                <div style="display:none">
 
-                 @Html.TextBox("RouteId",(string) ViewBag.routeId, new { @class = "form-control" })
-               
 
-            </div>
+                    @Html.TextBox("RouteId", (string)ViewBag.routeId, new { @class = "form-control" })
+
+
+                </div>
                 <button class="btn btn-info">Onayla</button>
 
             </form>

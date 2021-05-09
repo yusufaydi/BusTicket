@@ -6,13 +6,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BusTicket.Models
 {
-    public class Bus
+    public class Bus : BaseModel
     {
-        [Key]
-        public int BusId { get; set; }
-
         public int SeatCapacity { get; set; }
-
-        public DateTime LastUpdateDate { get; set; }
     }
 }

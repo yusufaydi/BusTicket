@@ -22,15 +22,7 @@ namespace BusTicket.Controllers
             _logger = logger;
             _db = db;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
         [HttpGet]
         public IActionResult BuyTicket()
         {
@@ -38,13 +30,13 @@ namespace BusTicket.Controllers
             viewmodel.LocationList = new Dictionary<int, Location>();
             foreach (var item in _db.Location.ToList())
             {
-                viewmodel.LocationList.Add(item.LocationId, item);
+                viewmodel.LocationList.Add(item.Id, item);
             }
 
             viewmodel.RouteList = new Dictionary<int, Route>();
             foreach (var item in _db.Route.ToList())
             {
-                viewmodel.RouteList.Add(item.RouteId, item);
+                viewmodel.RouteList.Add(item.Id, item);
             }
 
             ViewBag.viewModel = viewmodel;
@@ -58,14 +50,14 @@ namespace BusTicket.Controllers
             viewmodel.LocationList = new Dictionary<int, Location>();
             foreach (var item in _db.Location.ToList())
             {
-                viewmodel.LocationList.Add(item.LocationId, item);
+                viewmodel.LocationList.Add(item.Id, item);
             }
 
             viewmodel.RouteList = new Dictionary<int, Route>();
             var routeList = _db.Route.Where(x => x.DepartureTime == searchTicket.DepartureTime && x.StartLocationId == searchTicket.LocationId).ToList();
             foreach (var item in routeList)
             {
-                viewmodel.RouteList.Add(item.RouteId, item);
+                viewmodel.RouteList.Add(item.Id, item);
             }
 
             ViewBag.viewModel = viewmodel;
@@ -81,11 +73,29 @@ namespace BusTicket.Controllers
         [HttpPost]
         public IActionResult Confirm(UserConfirm userConfirm)
         {
-            var userId = _db.User.Where(x => x.UserName == userConfirm.UserName).FirstOrDefault().UserId;
-            _db.Ticket.Add(new Ticket { RouteId = Convert.ToInt32(userConfirm.RouteId), LastUpdateDate = DateTime.Now, UserId = userId });
+            var userId = _db.User.Where(x => x.UserName == userConfirm.UserName).FirstOrDefault().Id;
+            var route = _db.Route.SingleOrDefault(x => x.Id == Convert.ToInt32(userConfirm.RouteId));
+            _db.Ticket.Add(new Ticket { RouteId = Convert.ToInt32(userConfirm.RouteId), LastUpdateDate = DateTime.Now, UserId = userId, Price = route.RoutPrice, RecordStatus= "A" });
+
+            route.FilledSeatCount += 1;
+            UpdateSeatPriceOfRoute(route.Id);
             _db.SaveChanges();
 
-            return View();
+            return RedirectToAction("BuyTicket", "Home");
+        }
+
+        private void UpdateSeatPriceOfRoute(int routeId)
+        {
+            var route = _db.Route.SingleOrDefault(x => x.Id == routeId);
+
+            int rate = route.FilledSeatCount / 5;
+            if (route.FilledSeatCount % 5 == 0)
+            {
+                decimal startPrice = (route.RoutPrice - (10 * (rate - 1)));
+                route.RoutPrice = startPrice + (startPrice * 0.10m * rate);
+            }
+            
+            
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
